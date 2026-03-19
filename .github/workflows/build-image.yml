@@ -11,9 +11,9 @@ on:
     branches:
       - main
     paths:
-      # Rebuild when the Dockerfile or any exercise source changes
       - "docker/Dockerfile"
       - "exercises/**"
+      - ".github/workflows/build-image.yml"
   workflow_dispatch:
     inputs:
       reason:
@@ -23,7 +23,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # Update IMAGE_NAME to match your GitHub org/repo
   IMAGE_NAME: mmerrell/temporal-java-sandbox
 
 jobs:
@@ -67,9 +66,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # Cache layers in the registry to speed up subsequent builds.
-          # The Maven dependency warm-up layer is the expensive one (~3 min);
-          # caching it means iterating on exercise content is fast.
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
