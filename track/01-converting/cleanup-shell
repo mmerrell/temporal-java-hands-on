@@ -1,0 +1,4 @@
+#!/bin/bash
+# cleanup-shell for Exercise 1
+# Nothing to tear down — Temporal server and sandbox containers are recycled by Instruqt.
+exit 0

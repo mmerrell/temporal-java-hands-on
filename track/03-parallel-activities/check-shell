@@ -1,0 +1,63 @@
+#!/bin/bash
+# check-shell for Exercise 3: Parallel Activities
+# The three key API calls must all be present in InventoryReservationWorkflowImpl.java:
+#   Async.function()      — fan-out
+#   Promise.allOf()       — barrier
+#   p.get() in a loop     — collect results
+# Plus: the placeholder comment removed, OutOfStock failure present, and compile.
+
+EXERCISE_DIR="/home/user/exercise"
+INVENTORY_IMPL="$EXERCISE_DIR/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java"
+
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+# ─── Check 1: Async.function() used for fan-out ──────────────────────────────
+if ! grep -q "Async\.function" "$INVENTORY_IMPL"; then
+  fail "InventoryReservationWorkflowImpl is missing Async.function(). Use it to launch each warehouse check concurrently."
+fi
+pass "Async.function() used for fan-out"
+
+# ─── Check 2: Promise.allOf() used as barrier ────────────────────────────────
+if ! grep -q "Promise\.allOf" "$INVENTORY_IMPL"; then
+  fail "InventoryReservationWorkflowImpl is missing Promise.allOf(promises).get(). Use it to wait for all warehouse checks to finish."
+fi
+pass "Promise.allOf() barrier in place"
+
+# ─── Check 3: Results collected via p.get() ──────────────────────────────────
+if ! grep -q "\.get()" "$INVENTORY_IMPL"; then
+  fail "InventoryReservationWorkflowImpl is missing .get() calls to collect promise results. Iterate over promises and call p.get() on each."
+fi
+pass "Promise results collected with .get()"
+
+# ─── Check 4: Placeholder comment removed (learner did the work) ─────────────
+if grep -q "your fan-out code here" "$INVENTORY_IMPL"; then
+  fail "The placeholder comment '// ... your fan-out code here' is still present. Replace it with your Async.function() loop."
+fi
+pass "Placeholder code replaced"
+
+# ─── Check 5: OutOfStock failure present ─────────────────────────────────────
+if ! grep -q "OutOfStock" "$INVENTORY_IMPL"; then
+  fail "InventoryReservationWorkflowImpl is missing the ApplicationFailure with type \"OutOfStock\" for when no warehouse has stock."
+fi
+pass "OutOfStock failure present"
+
+# ─── Check 6: Not just returning null ────────────────────────────────────────
+if grep -q "^        return null" "$INVENTORY_IMPL"; then
+  fail "reserve() still returns null. Implement the result-collection loop and return the first non-null reservation ID."
+fi
+pass "reserve() returns a real result"
+
+# ─── Check 7: Compile ────────────────────────────────────────────────────────
+echo "Running mvn compile..."
+cd "$EXERCISE_DIR"
+if ! mvn compile -q 2>&1; then
+  fail "Project does not compile. Fix compilation errors above and try again."
+fi
+pass "Project compiles successfully"
+
+echo ""
+echo "✅ All checks passed!"
+echo "   Terminal 1: mvn compile exec:java -Dexec.mainClass=\"fulfillment.FulfillmentWorker\""
+echo "   Terminal 2: mvn exec:java -Dexec.mainClass=\"fulfillment.Starter\""
+echo "   Open inventory-ORD-1003 in the Web UI — all 6 activities scheduled in parallel."

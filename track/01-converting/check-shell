@@ -1,0 +1,60 @@
+#!/bin/bash
+# check-shell for Exercise 1: Converting a Workflow
+# Strategy: surgical source grep + mvn compile
+# We verify the learner replaced stubs with real API calls, then confirm compilation.
+
+EXERCISE_DIR="/home/user/exercise"
+ACTIVITIES_IMPL="$EXERCISE_DIR/src/main/java/fulfillment/FulfillmentActivitiesImpl.java"
+WORKFLOW_IMPL="$EXERCISE_DIR/src/main/java/fulfillment/FulfillmentWorkflowImpl.java"
+
+fail() {
+  echo "FAIL: $1"
+  exit 1
+}
+
+pass() {
+  echo "PASS: $1"
+}
+
+# ─── Check 1: UnsupportedOperationException stubs removed ────────────────────
+if grep -q "UnsupportedOperationException" "$ACTIVITIES_IMPL"; then
+  fail "FulfillmentActivitiesImpl still has unimplemented stubs (UnsupportedOperationException found). Implement all three activity methods."
+fi
+pass "Activity stubs replaced"
+
+# ─── Check 2: ApplicationFailure used in activities ──────────────────────────
+if ! grep -q "ApplicationFailure" "$ACTIVITIES_IMPL"; then
+  fail "FulfillmentActivitiesImpl should use ApplicationFailure.newFailure() for error cases, not raw Exception throws."
+fi
+pass "ApplicationFailure used in activities"
+
+# ─── Check 3: Activity stub wired up in workflow ─────────────────────────────
+if ! grep -q "Workflow.newActivityStub" "$WORKFLOW_IMPL"; then
+  fail "FulfillmentWorkflowImpl is missing Workflow.newActivityStub(...). Create a FulfillmentActivities stub."
+fi
+pass "Activity stub created in workflow"
+
+# ─── Check 4: StartToCloseTimeout configured ─────────────────────────────────
+if ! grep -q "StartToCloseTimeout\|setStartToCloseTimeout" "$WORKFLOW_IMPL"; then
+  fail "FulfillmentWorkflowImpl is missing a StartToCloseTimeout on the ActivityOptions."
+fi
+pass "StartToCloseTimeout configured"
+
+# ─── Check 5: processOrder returns a real OrderResult (not null) ─────────────
+if grep -q "return null" "$WORKFLOW_IMPL"; then
+  fail "FulfillmentWorkflowImpl.processOrder() still returns null. Call the activities and return an OrderResult."
+fi
+pass "processOrder returns a result"
+
+# ─── Check 6: Compile ────────────────────────────────────────────────────────
+echo "Running mvn compile..."
+cd "$EXERCISE_DIR"
+if ! mvn compile -q 2>&1; then
+  fail "Project does not compile. Fix any compilation errors above and try again."
+fi
+pass "Project compiles successfully"
+
+echo ""
+echo "✅ All checks passed! Your workflow is ready to run."
+echo "   Terminal 1: mvn compile exec:java -Dexec.mainClass=\"fulfillment.FulfillmentWorker\""
+echo "   Terminal 2: mvn exec:java -Dexec.mainClass=\"fulfillment.Starter\""

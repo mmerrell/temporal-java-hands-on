@@ -1,0 +1,23 @@
+#!/bin/bash
+# solve-shell for Exercise 3: Parallel Activities
+
+EXERCISE_DIR="/home/user/exercise"
+SOLUTION_DIR="/home/user/solution"
+
+echo "Applying solution for Exercise 3..."
+
+cp -r "$SOLUTION_DIR/src/." "$EXERCISE_DIR/src/"
+
+cd "$EXERCISE_DIR"
+mvn compile -q
+
+echo ""
+echo "✅ Solution applied."
+echo "   Review: src/main/java/fulfillment/InventoryReservationWorkflowImpl.java"
+echo "   Key patterns:"
+echo "     - Async.function() launches all 6 warehouse checks without blocking"
+echo "     - Promise.allOf(promises).get() waits for all to complete"
+echo "     - Iterating p.get() collects the first non-null result"
+echo ""
+echo "   Terminal 1: mvn compile exec:java -Dexec.mainClass=\"fulfillment.FulfillmentWorker\""
+echo "   Terminal 2: mvn exec:java -Dexec.mainClass=\"fulfillment.Starter\""

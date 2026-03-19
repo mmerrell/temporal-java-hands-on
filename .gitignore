@@ -1,0 +1,16 @@
+## macOS
+.DS_Store
+
+## IntelliJ
+.idea/
+*.iml
+*.iws
+
+## Maven build output (in exercises/)
+exercises/**/target/
+
+## Local Docker build artifacts
+*.tar
+
+## Instruqt — track.yml and assignment.md get IDs populated after first push.
+## Don't ignore them, but don't be surprised when they change after pull.

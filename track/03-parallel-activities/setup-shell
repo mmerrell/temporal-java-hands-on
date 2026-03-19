@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "Waiting for Temporal server..."
+for i in $(seq 1 30); do
+  if temporal workflow list --address temporal-server:7233 &>/dev/null 2>&1; then
+    echo "Temporal server is ready."
+    break
+  fi
+  sleep 2
+done
+
+mkdir -p /home/user/exercise /home/user/solution
+
+cp -r /opt/exercises/3_parallel_activities/practice/. /home/user/exercise/
+cp -r /opt/exercises/3_parallel_activities/solution/. /home/user/solution/
+
+chown -R user:user /home/user/exercise /home/user/solution
+
+cat >> /home/user/.bashrc <<'EOF'
+
+export TEMPORAL_ADDRESS="temporal-server:7233"
+alias tl="temporal workflow list --address temporal-server:7233"
+EOF
+
+cd /home/user/exercise
+sudo -u user mvn dependency:resolve -q 2>/dev/null || true
+
+echo "Exercise 3 ready. Edit /home/user/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java"

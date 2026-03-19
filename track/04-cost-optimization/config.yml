@@ -1,0 +1,30 @@
+version: "3"
+containers:
+  - name: sandbox
+    image: ghcr.io/temporal-io/temporal-java-sandbox:latest
+    shell: /bin/bash
+    memory: 1024
+    environment:
+      TEMPORAL_ADDRESS: "temporal-server:7233"
+  - name: temporal-server
+    image: temporalio/temporal:latest
+    memory: 512
+    ports:
+      - port: 8233
+        host_port: 8233
+        protocol: TCP
+
+tabs:
+  - type: terminal
+    title: Terminal 1 – Worker
+    hostname: sandbox
+    path: /home/user/exercise
+  - type: terminal
+    title: Terminal 2 – Starter
+    hostname: sandbox
+    path: /home/user/exercise
+  - type: service
+    title: Temporal Web UI
+    hostname: temporal-server
+    port: 8233
+    path: /

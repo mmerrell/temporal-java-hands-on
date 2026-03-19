@@ -1,0 +1,22 @@
+#!/bin/bash
+# solve-shell for Exercise 2: Child Workflows
+
+EXERCISE_DIR="/home/user/exercise"
+SOLUTION_DIR="/home/user/solution"
+
+echo "Applying solution for Exercise 2..."
+
+cp -r "$SOLUTION_DIR/src/." "$EXERCISE_DIR/src/"
+
+cd "$EXERCISE_DIR"
+mvn compile -q
+
+echo ""
+echo "✅ Solution applied."
+echo "   Review the changes:"
+echo "     - src/main/java/fulfillment/InventoryReservationWorkflowImpl.java"
+echo "     - src/main/java/fulfillment/FulfillmentWorkflowImpl.java"
+echo ""
+echo "   Terminal 1: mvn compile exec:java -Dexec.mainClass=\"fulfillment.FulfillmentWorker\""
+echo "   Terminal 2: mvn exec:java -Dexec.mainClass=\"fulfillment.Starter\""
+echo "   Find both fulfillment-ORD-1002 and inventory-ORD-1002 in the Web UI."
