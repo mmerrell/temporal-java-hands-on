@@ -24,7 +24,7 @@ on:
 env:
   REGISTRY: ghcr.io
   # Update IMAGE_NAME to match your GitHub org/repo
-  IMAGE_NAME: temporal-io/temporal-java-sandbox
+  IMAGE_NAME: mmerrell/temporal-java-sandbox
 
 jobs:
   build-and-push:

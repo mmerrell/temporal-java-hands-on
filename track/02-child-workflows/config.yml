@@ -1,7 +1,7 @@
 version: "3"
 containers:
   - name: sandbox
-    image: ghcr.io/temporal-io/temporal-java-sandbox:latest
+    image: ghcr.io/mmerrell/temporal-java-sandbox:latest
     shell: /bin/bash
     memory: 1024
     environment:
