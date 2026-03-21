@@ -9,22 +9,3 @@ containers:
   - name: temporal-server
     image: temporalio/temporal:latest
     memory: 512
-    ports:
-      - port: 8233
-        host_port: 8233
-        protocol: TCP
-
-tabs:
-  - type: terminal
-    title: Terminal 1 – Worker
-    hostname: sandbox
-    path: /home/user/exercise
-  - type: terminal
-    title: Terminal 2 – Starter
-    hostname: sandbox
-    path: /home/user/exercise
-  - type: service
-    title: Temporal Web UI
-    hostname: temporal-server
-    port: 8233
-    path: /

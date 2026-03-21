@@ -1,7 +1,8 @@
 slug: temporal-java-hands-on
-id: ""
+id: wtrbra2ndbvf
 title: Temporal Java SDK – Hands-On Lab
-teaser: Build a durable order-fulfillment system with the Temporal Java SDK — activities, child workflows, parallel fan-out, and cost optimization.
+teaser: Build a durable order-fulfillment system with the Temporal Java SDK — activities,
+  child workflows, parallel fan-out, and cost optimization.
 description: |-
   Four progressive coding challenges using the Temporal Java SDK. Each challenge drops you into a partially-implemented order fulfillment workflow and asks you to fill in the missing pieces.
 
@@ -17,12 +18,12 @@ description: |-
   **Prerequisites:** Basic Java familiarity. No prior Temporal experience required — the exercises are self-guided.
 icon: https://storage.googleapis.com/instruqt-frontend/img/tracks/default.png
 tags:
-  - java
-  - temporal
-  - workflows
+- temporal
+- workflows
+- java
 owner: temporal
 developers:
-  - marcus.merrell@temporal.io
+- marcus.merrell@temporal.io
 idle_timeout: 600
 timelimit: 7200
 lab_config:
@@ -33,4 +34,5 @@ lab_config:
   hideStopButton: false
   default_layout: AssignmentLeft
   default_layout_sidebar_size: 50
+checksum: "18192404686541918879"
 enhanced_loading: false
