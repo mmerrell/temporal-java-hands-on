@@ -5,7 +5,6 @@ rm -rf /workspace/exercise /workspace/solution
 cp -r /workspace/exercises/1_converting/practice /workspace/exercise
 cp -r /workspace/exercises/1_converting/solution /workspace/solution
 
-# Workspace settings scoped to this exercise directory
 mkdir -p /workspace/exercise/.vscode
 cat > /workspace/exercise/.vscode/settings.json <<'EOF'
 {
@@ -19,6 +18,12 @@ cat > /workspace/exercise/.vscode/settings.json <<'EOF'
     }
 }
 EOF
+
+# Open the two key files in VS Code — background so setup doesn't block
+nohup vscode-open-files \
+    /workspace/exercise/src/main/java/fulfillment/FulfillmentPipeline.java \
+    /workspace/exercise/src/main/java/fulfillment/FulfillmentActivitiesImpl.java \
+    &>/tmp/vscode-open.log &
 
 echo "Exercise 1 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"

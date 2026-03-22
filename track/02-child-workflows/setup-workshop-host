@@ -19,5 +19,10 @@ cat > /workspace/exercise/.vscode/settings.json <<'EOF'
 }
 EOF
 
+nohup vscode-open-files \
+    /workspace/exercise/src/main/java/fulfillment/FulfillmentWorkflowImpl.java \
+    /workspace/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java \
+    &>/tmp/vscode-open.log &
+
 echo "Exercise 2 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"

@@ -173,4 +173,26 @@ alias tl="temporal workflow list"
 alias mvnw="mvn compile exec:java"
 EOF
 
+# ─── Helper script for opening files in code-server ─────────────────────────
+# Called by per-challenge setup scripts with the files to open.
+# Usage: /usr/local/bin/vscode-open-files file1 file2 ...
+cat > /usr/local/bin/vscode-open-files <<'SCRIPT'
+#!/bin/bash
+# Wait for code-server to accept connections
+for i in $(seq 1 20); do
+    if curl -sk https://localhost:8443 | grep -q "code-server" 2>/dev/null || \
+       curl -sk https://localhost:8443/healthz 2>/dev/null | grep -q "ok"; then
+        break
+    fi
+    sleep 2
+done
+sleep 3  # Extra buffer for extension activation
+
+# Open each file via code-server CLI
+for f in "$@"; do
+    code-server --command vscode.open "$f" 2>/dev/null || true
+done
+SCRIPT
+chmod +x /usr/local/bin/vscode-open-files
+
 echo "Track setup complete."
