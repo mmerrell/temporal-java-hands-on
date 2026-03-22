@@ -21,22 +21,28 @@ notes:
 
     Hit **Start** when you're ready.
 tabs:
+- id: dcp2kcuvdiyj
+  title: VS Code
+  type: service
+  hostname: workshop-host
+  path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/main/java/fulfillment/FulfillmentWorkflowImpl.java&openFile=/workspace/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java
+  port: 8443
 - id: 9w5vulsv78xr
-  title: Terminal 1 – Worker
+  title: Terminal 1 - Worker
   type: terminal
-  hostname: sandbox
-  workdir: /home/user/exercise
+  hostname: workshop-host
+  workdir: /workspace/exercise
 - id: isksn9ka25v9
-  title: Terminal 2 – Starter
+  title: Terminal 2 - Starter
   type: terminal
-  hostname: sandbox
-  workdir: /home/user/exercise
+  hostname: workshop-host
+  workdir: /workspace/exercise
 - id: u8avwbdct35o
   title: Temporal Web UI
   type: service
-  hostname: temporal-server
+  hostname: workshop-host
   path: /
-  port: 8233
+  port: 8080
 difficulty: basic
 timelimit: 2400
 enhanced_loading: null
@@ -45,10 +51,10 @@ enhanced_loading: null
 ## Exercise 2: Child Workflows
 
 You're working with two implementation files this time:
-- **`InventoryReservationWorkflowImpl.java`** — the child workflow (new)
+- **`InventoryReservationWorkflowImpl.java`** — the child workflow (new, active tab)
 - **`FulfillmentWorkflowImpl.java`** — the parent workflow (calls the child)
 
-Files are in `/home/user/exercise/src/main/java/fulfillment/`. Look for `// TODO` comments in both.
+Files are in `/workspace/exercise/src/main/java/fulfillment/`. Look for `// TODO` comments in both.
 
 ***
 
@@ -96,12 +102,12 @@ String reservationId = inventoryWorkflow.reserve(order.getItemSku(), order.getQu
 
 ### Part D – Run it
 
-**Terminal 1 – Worker:**
+**Terminal 1 - Worker:**
 ```
 mvn compile exec:java -Dexec.mainClass="fulfillment.FulfillmentWorker"
 ```
 
-**Terminal 2 – Starter:**
+**Terminal 2 - Starter:**
 ```
 mvn exec:java -Dexec.mainClass="fulfillment.Starter"
 ```

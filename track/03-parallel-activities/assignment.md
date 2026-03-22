@@ -22,22 +22,28 @@ notes:
 
     Hit **Start** when you're ready.
 tabs:
+- id: 0qo9f1nhuz0c
+  title: VS Code
+  type: service
+  hostname: workshop-host
+  path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/main/java/fulfillment/FulfillmentWorkflowImpl.java&openFile=/workspace/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java
+  port: 8443
 - id: xscxon9ztytk
-  title: Terminal 1 – Worker
+  title: Terminal 1 - Worker
   type: terminal
-  hostname: sandbox
-  workdir: /home/user/exercise
+  hostname: workshop-host
+  workdir: /workspace/exercise
 - id: omgwavx03gl8
-  title: Terminal 2 – Starter
+  title: Terminal 2 - Starter
   type: terminal
-  hostname: sandbox
-  workdir: /home/user/exercise
+  hostname: workshop-host
+  workdir: /workspace/exercise
 - id: yj4oa85lxsws
   title: Temporal Web UI
   type: service
-  hostname: temporal-server
+  hostname: workshop-host
   path: /
-  port: 8233
+  port: 8080
 difficulty: intermediate
 timelimit: 2400
 enhanced_loading: null
@@ -45,10 +51,10 @@ enhanced_loading: null
 
 ## Exercise 3: Parallel Activities
 
-All your work is in **`InventoryReservationWorkflowImpl.java`**.
+All your work is in **`InventoryReservationWorkflowImpl.java`** (active tab).
 The activity stub is already wired up — focus on the `reserve()` method.
 
-Files are in `/home/user/exercise/src/main/java/fulfillment/`.
+Files are in `/workspace/exercise/src/main/java/fulfillment/`.
 
 ***
 
@@ -98,12 +104,12 @@ throw ApplicationFailure.newNonRetryableFailure("No stock available", "OutOfStoc
 
 ### Part D – Run it and compare
 
-**Terminal 1 – Worker:**
+**Terminal 1 - Worker:**
 ```
 mvn compile exec:java -Dexec.mainClass="fulfillment.FulfillmentWorker"
 ```
 
-**Terminal 2 – Starter:**
+**Terminal 2 - Starter:**
 ```
 mvn exec:java -Dexec.mainClass="fulfillment.Starter"
 ```

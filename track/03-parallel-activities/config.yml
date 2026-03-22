@@ -1,11 +1,6 @@
 version: "3"
-containers:
-  - name: sandbox
-    image: ghcr.io/mmerrell/temporal-java-sandbox:latest
-    shell: /bin/bash
-    memory: 1024
-    environment:
-      TEMPORAL_ADDRESS: "temporal-server:7233"
-  - name: temporal-server
-    image: temporalio/temporal:latest
-    memory: 512
+virtualmachines:
+- name: workshop-host
+  image: instruqt/docker-28-3
+  shell: /bin/bash
+  machine_type: n1-standard-1

@@ -18,22 +18,28 @@ notes:
 
     Hit **Start** when you're ready.
 tabs:
+- id: beatbahvb8mh
+  title: VS Code
+  type: service
+  hostname: workshop-host
+  path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/main/java/fulfillment/FulfillmentPipeline.java&openFile=/workspace/exercise/src/main/java/fulfillment/FulfillmentActivitiesImpl.java
+  port: 8443
 - id: aucxy2upmgp6
-  title: Terminal 1 – Worker
+  title: Terminal 1 - Worker
   type: terminal
-  hostname: sandbox
-  workdir: /home/user/exercise
+  hostname: workshop-host
+  workdir: /workspace/exercise
 - id: owpxr5lnaa1c
-  title: Terminal 2 – Starter
+  title: Terminal 2 - Starter
   type: terminal
-  hostname: sandbox
-  workdir: /home/user/exercise
+  hostname: workshop-host
+  workdir: /workspace/exercise
 - id: beuekqadj4dh
   title: Temporal Web UI
   type: service
-  hostname: temporal-server
+  hostname: workshop-host
   path: /
-  port: 8233
+  port: 8080
 difficulty: basic
 timelimit: 2400
 enhanced_loading: null
@@ -41,25 +47,25 @@ enhanced_loading: null
 
 ## Exercise 1: Converting a Workflow
 
-Open **`FulfillmentActivitiesImpl.java`** and **`FulfillmentWorkflowImpl.java`** in the editor.
+Open **`FulfillmentActivitiesImpl.java`** and **`FulfillmentWorkflowImpl.java`** in VS Code.
 Look for `// TODO` comments — they mark everything you need to implement.
 
-Files are in `/home/user/exercise/src/main/java/fulfillment/`.
+> **Note:** Wait for the "Java" indicator in the VS Code status bar to finish indexing before
+> expecting autocomplete and the Problems panel to work. This takes about 30-60 seconds on first load.
+
+Files are in `/workspace/exercise/src/main/java/fulfillment/`.
 
 ***
 
 ### Part A – Implement the three Activities
 
-In `FulfillmentActivitiesImpl.java`, fill in each of the three methods:
-
-1. `reserveInventory(Order order)` — move the logic from `FulfillmentPipeline.java`
-2. `processPayment(Order order)` — same pattern
-3. `dispatchToFulfillment(Order order, String reservationId)` — same pattern
+In `FulfillmentActivitiesImpl.java`, fill in each of the three methods.
+Look at `FulfillmentPipeline.java` (already open in a tab) to understand what each method should do.
 
 For each method:
-- Replace the `throw new UnsupportedOperationException(...)` stub
+- Replace the `throw new UnsupportedOperationException(...)` stub with the actual logic
 - Replace raw `throw new Exception(...)` calls with `ApplicationFailure.newFailure(message, type)`
-- Keep the `Math.random()` failure simulation — we want retries to happen
+- Keep the `Math.random()` failure simulation — Temporal will retry it automatically
 
 ***
 
@@ -78,12 +84,12 @@ In `FulfillmentWorkflowImpl.java`:
 
 Once your code compiles, start both processes:
 
-**Terminal 1 – Worker:**
+**Terminal 1 - Worker:**
 ```
 mvn compile exec:java -Dexec.mainClass="fulfillment.FulfillmentWorker"
 ```
 
-**Terminal 2 – Starter:**
+**Terminal 2 - Starter:**
 ```
 mvn exec:java -Dexec.mainClass="fulfillment.Starter"
 ```
