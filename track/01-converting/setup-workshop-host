@@ -1,10 +1,24 @@
 #!/bin/bash
 set -euo pipefail
 
-# Copy this challenge's practice and solution into /workspace
 rm -rf /workspace/exercise /workspace/solution
 cp -r /workspace/exercises/1_converting/practice /workspace/exercise
 cp -r /workspace/exercises/1_converting/solution /workspace/solution
+
+# Workspace settings scoped to this exercise directory
+mkdir -p /workspace/exercise/.vscode
+cat > /workspace/exercise/.vscode/settings.json <<'EOF'
+{
+    "workbench.activityBar.visible": false,
+    "workbench.secondarySideBar.visible": false,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": false
+    }
+}
+EOF
 
 echo "Exercise 1 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"

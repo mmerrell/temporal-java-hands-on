@@ -79,9 +79,11 @@ done
 # ─── code-server (VS Code in browser) ─────────────────────────────────────────
 curl -fsSL https://code-server.dev/install.sh | sh
 
-# Install Java extension pack for IntelliSense, autocomplete, and Problems panel
+# Install Java extension pack — do this before writing settings so the install
+# process doesn't clobber our settings.json
 code-server --install-extension vscjava.vscode-java-pack
 
+# User settings — written after extension install to avoid being overwritten
 mkdir -p /root/.local/share/code-server/User
 cat > /root/.local/share/code-server/User/settings.json <<'EOF'
 {
@@ -93,12 +95,31 @@ cat > /root/.local/share/code-server/User/settings.json <<'EOF'
     "java.format.enabled": true,
     "workbench.activityBar.visible": false,
     "workbench.secondarySideBar.visible": false,
+    "workbench.statusBar.visible": true,
     "editor.suggestOnTriggerCharacters": true,
     "editor.quickSuggestions": {
         "other": true,
         "comments": false,
         "strings": false
     }
+}
+EOF
+
+# Workspace settings — these override user settings and survive extension updates
+# Written to /workspace/.vscode/ so they apply whenever /workspace/exercise is opened.
+# Per-challenge setup scripts will also write to /workspace/exercise/.vscode/.
+mkdir -p /workspace/.vscode
+cat > /workspace/.vscode/settings.json <<'EOF'
+{
+    "workbench.activityBar.visible": false,
+    "workbench.secondarySideBar.visible": false,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": false
+    },
+    "java.project.referencedLibraries": []
 }
 EOF
 
