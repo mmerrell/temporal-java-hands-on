@@ -173,26 +173,89 @@ alias tl="temporal workflow list"
 alias mvnw="mvn compile exec:java"
 EOF
 
-# ─── Helper script for opening files in code-server ─────────────────────────
-# Called by per-challenge setup scripts with the files to open.
-# Usage: /usr/local/bin/vscode-open-files file1 file2 ...
-cat > /usr/local/bin/vscode-open-files <<'SCRIPT'
+# ─── Helper: write a .code-workspace that pre-opens files ───────────────────
+# Per-challenge setup scripts call this to stage files for VS Code to open.
+# VS Code restores open editors from the workspace file on next load.
+# Usage: /usr/local/bin/stage-vscode-files file1 file2 ...
+cat > /usr/local/bin/stage-vscode-files <<'SCRIPT'
 #!/bin/bash
-# Wait for code-server to accept connections
-for i in $(seq 1 20); do
-    if curl -sk https://localhost:8443 | grep -q "code-server" 2>/dev/null || \
-       curl -sk https://localhost:8443/healthz 2>/dev/null | grep -q "ok"; then
-        break
-    fi
-    sleep 2
-done
-sleep 3  # Extra buffer for extension activation
+FILES=("$@")
 
-# Open each file via code-server CLI
-for f in "$@"; do
-    code-server --command vscode.open "$f" 2>/dev/null || true
+# Build the openEditors JSON array
+EDITORS=""
+for f in "${FILES[@]}"; do
+    EDITORS+="        {\"uri\": \"file://${f}\"},\n"
 done
+# Remove trailing comma+newline and trim
+EDITORS=$(echo -e "$EDITORS" | sed '$ s/,$//')
+
+mkdir -p /workspace/exercise/.vscode
+
+# Write a tasks.json that VS Code reads on open — this is a no-op task
+# but forces VS Code to notice the workspace and restore editors from
+# the untitled session stored below.
+cat > /workspace/exercise/.vscode/tasks.json <<EOF
+{
+    "version": "2.0.0",
+    "tasks": []
+}
+EOF
+
+# Write a launch config — empty but causes Java extension to activate early
+cat > /workspace/exercise/.vscode/launch.json <<EOF
+{
+    "version": "0.2.0",
+    "configurations": []
+}
+EOF
+
+# Pre-populate code-server's workspace storage with open editors.
+# code-server stores this in a predictable path based on workspace folder hash.
+# The simplest reliable approach: write the files into a .code-workspace file
+# and point code-server at it instead of the raw folder.
+FIRST="${FILES[0]}"
+LAST="${FILES[-1]}"
+
+cat > /workspace/exercise.code-workspace <<EOF
+{
+    "folders": [
+        { "path": "/workspace/exercise" }
+    ],
+    "settings": {
+        "workbench.activityBar.visible": false,
+        "workbench.secondarySideBar.visible": false,
+        "editor.suggestOnTriggerCharacters": true,
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": false
+        }
+    }
+}
+EOF
 SCRIPT
-chmod +x /usr/local/bin/vscode-open-files
+chmod +x /usr/local/bin/stage-vscode-files
+
+# Update code-server to open the workspace file instead of the raw folder
+# This is done by updating the systemd ExecStart to point at the .code-workspace
+# The per-challenge setup scripts will create exercise.code-workspace before
+# code-server restarts, so it will pick up the right files.
+cat > /etc/systemd/system/code-server.service <<'EOF'
+[Unit]
+Description=Code Server
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/code-server --host 0.0.0.0 --port 8443 --cert --auth none /workspace/exercise.code-workspace
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl restart code-server
 
 echo "Track setup complete."

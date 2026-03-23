@@ -5,24 +5,11 @@ rm -rf /workspace/exercise /workspace/solution
 cp -r /workspace/exercises/2_child_workflows/practice /workspace/exercise
 cp -r /workspace/exercises/2_child_workflows/solution /workspace/solution
 
-mkdir -p /workspace/exercise/.vscode
-cat > /workspace/exercise/.vscode/settings.json <<'EOF'
-{
-    "workbench.activityBar.visible": false,
-    "workbench.secondarySideBar.visible": false,
-    "editor.suggestOnTriggerCharacters": true,
-    "editor.quickSuggestions": {
-        "other": true,
-        "comments": false,
-        "strings": false
-    }
-}
-EOF
-
-nohup vscode-open-files \
+stage-vscode-files \
     /workspace/exercise/src/main/java/fulfillment/FulfillmentWorkflowImpl.java \
-    /workspace/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java \
-    &>/tmp/vscode-open.log &
+    /workspace/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java
+
+systemctl restart code-server
 
 echo "Exercise 2 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"

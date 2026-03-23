@@ -5,25 +5,13 @@ rm -rf /workspace/exercise /workspace/solution
 cp -r /workspace/exercises/1_converting/practice /workspace/exercise
 cp -r /workspace/exercises/1_converting/solution /workspace/solution
 
-mkdir -p /workspace/exercise/.vscode
-cat > /workspace/exercise/.vscode/settings.json <<'EOF'
-{
-    "workbench.activityBar.visible": false,
-    "workbench.secondarySideBar.visible": false,
-    "editor.suggestOnTriggerCharacters": true,
-    "editor.quickSuggestions": {
-        "other": true,
-        "comments": false,
-        "strings": false
-    }
-}
-EOF
-
-# Open the two key files in VS Code — background so setup doesn't block
-nohup vscode-open-files \
+# Stage the workspace file with the files we want open
+stage-vscode-files \
     /workspace/exercise/src/main/java/fulfillment/FulfillmentPipeline.java \
-    /workspace/exercise/src/main/java/fulfillment/FulfillmentActivitiesImpl.java \
-    &>/tmp/vscode-open.log &
+    /workspace/exercise/src/main/java/fulfillment/FulfillmentActivitiesImpl.java
+
+# Restart code-server so it picks up the new workspace file
+systemctl restart code-server
 
 echo "Exercise 1 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"
