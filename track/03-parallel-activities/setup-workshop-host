@@ -5,11 +5,5 @@ rm -rf /workspace/exercise /workspace/solution
 cp -r /workspace/exercises/3_parallel_activities/practice /workspace/exercise
 cp -r /workspace/exercises/3_parallel_activities/solution /workspace/solution
 
-stage-vscode-files \
-    /workspace/exercise/src/main/java/fulfillment/FulfillmentWorkflowImpl.java \
-    /workspace/exercise/src/main/java/fulfillment/InventoryReservationWorkflowImpl.java
-
-systemctl restart code-server
-
 echo "Exercise 3 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"

@@ -5,13 +5,5 @@ rm -rf /workspace/exercise /workspace/solution
 cp -r /workspace/exercises/1_converting/practice /workspace/exercise
 cp -r /workspace/exercises/1_converting/solution /workspace/solution
 
-# Stage the workspace file with the files we want open
-stage-vscode-files \
-    /workspace/exercise/src/main/java/fulfillment/FulfillmentPipeline.java \
-    /workspace/exercise/src/main/java/fulfillment/FulfillmentActivitiesImpl.java
-
-# Restart code-server so it picks up the new workspace file
-systemctl restart code-server
-
 echo "Exercise 1 ready."
 echo "Files are in /workspace/exercise/src/main/java/fulfillment/"
