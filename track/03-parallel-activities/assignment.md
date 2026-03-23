@@ -12,7 +12,7 @@ notes:
     that's 3 seconds minimum — even if the first warehouse has stock.
 
     **The parallel pattern checks all warehouses simultaneously.**
-    At Coupang's scale, this isn't an optimization — it's a requirement.
+    At scale, this isn't an optimization — it's a requirement.
     The same fan-out pattern applies anywhere you're processing many independent
     items: containers, SKUs, payment methods, notification channels.
 
